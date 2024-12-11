@@ -5,7 +5,7 @@
 #include <vector>
 
 const std::vector<std::string> MYDOCKFINDER_PROCESS_NAMES = {
-    "Mydock.exe", "dockmod64.exe", "dock.exe", "dockmod.exe"
+    "Mydock.exe", "dockmod64.exe", "dock.exe", "dockmod.exe", "Dock_64.exe", "Dock_32.exe"
 };
 
 const std::string MYDOCKFINDER_PATH = "C:\\Program Files\\MyDockFinder\\Dock_64.exe"; // Percorso principale di MyDockFinder
