@@ -112,10 +112,6 @@ void wait_for_fullscreen_change(bool& dockfinder_running, const std::vector<std:
 }
 
 int main() {
-    if (!IsUserAnAdmin()) {
-        std::cerr << "Please run this program as administrator." << std::endl;
-        return 1;
-    }
 
     bool dockfinder_running = true;
 
