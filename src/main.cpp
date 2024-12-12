@@ -12,7 +12,10 @@ const std::string MYDOCKFINDER_PATH = "C:\\Program Files\\MyDockFinder\\Dock_64.
 
 bool is_process_running(const std::string& process_name) {
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hSnapshot == INVALID_HANDLE_VALUE) return false;
+    if (hSnapshot == INVALID_HANDLE_VALUE) {
+        std::cerr << "Failed to create process snapshot." << std::endl;
+        return false;
+    }
 
     PROCESSENTRY32 pe;
     pe.dwSize = sizeof(PROCESSENTRY32);
@@ -20,19 +23,24 @@ bool is_process_running(const std::string& process_name) {
     if (Process32First(hSnapshot, &pe)) {
         do {
             if (process_name == pe.szExeFile) {
+                std::cout << "Process found: " << process_name << std::endl;
                 CloseHandle(hSnapshot);
                 return true;
             }
         } while (Process32Next(hSnapshot, &pe));
     }
 
+    std::cout << "Process not found: " << process_name << std::endl;
     CloseHandle(hSnapshot);
     return false;
 }
 
 void stop_process(const std::vector<std::string>& process_names) {
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hSnapshot == INVALID_HANDLE_VALUE) return;
+    if (hSnapshot == INVALID_HANDLE_VALUE) {
+        std::cerr << "Failed to create process snapshot." << std::endl;
+        return;
+    }
 
     PROCESSENTRY32 pe;
     pe.dwSize = sizeof(PROCESSENTRY32);
@@ -43,9 +51,14 @@ void stop_process(const std::vector<std::string>& process_names) {
                 if (process_name == pe.szExeFile) {
                     HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, pe.th32ProcessID);
                     if (hProcess) {
-                        TerminateProcess(hProcess, 0);
+                        if (TerminateProcess(hProcess, 0)) {
+                            std::cout << "Terminated process: " << process_name << std::endl;
+                        } else {
+                            std::cerr << "Failed to terminate process: " << process_name << std::endl;
+                        }
                         CloseHandle(hProcess);
-                        std::cout << process_name << " terminated." << std::endl;
+                    } else {
+                        std::cerr << "Failed to open process for termination: " << process_name << std::endl;
                     }
                 }
             }
@@ -57,9 +70,9 @@ void stop_process(const std::vector<std::string>& process_names) {
 
 void start_process(const std::string& process_path) {
     if (ShellExecuteA(nullptr, "open", process_path.c_str(), nullptr, nullptr, SW_SHOWNORMAL) > (HINSTANCE)32) {
-        std::cout << process_path << " started." << std::endl;
+        std::cout << "Started process: " << process_path << std::endl;
     } else {
-        std::cerr << "Failed to start " << process_path << std::endl;
+        std::cerr << "Failed to start process: " << process_path << std::endl;
     }
 }
 
@@ -85,9 +98,11 @@ bool is_fullscreen() {
 void wait_for_fullscreen_change(bool& dockfinder_running, const std::vector<std::string>& process_names, const std::string& process_path) {
     while (true) {
         if (is_fullscreen() && dockfinder_running) {
+            std::cout << "Fullscreen application detected." << std::endl;
             stop_process(process_names);
             dockfinder_running = false;
         } else if (!is_fullscreen() && !dockfinder_running) {
+            std::cout << "No fullscreen application detected." << std::endl;
             start_process(process_path);
             dockfinder_running = true;
         }
@@ -97,6 +112,11 @@ void wait_for_fullscreen_change(bool& dockfinder_running, const std::vector<std:
 }
 
 int main() {
+    if (!IsUserAnAdmin()) {
+        std::cerr << "Please run this program as administrator." << std::endl;
+        return 1;
+    }
+
     bool dockfinder_running = true;
 
     wait_for_fullscreen_change(dockfinder_running, MYDOCKFINDER_PROCESS_NAMES, MYDOCKFINDER_PATH);
