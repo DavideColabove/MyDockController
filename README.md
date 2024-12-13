@@ -31,11 +31,11 @@ To compile the program, you can use either `g++` or `gcc`. Below are the command
 
 #### Using `g++`:
 ```bash
-g++ -o mydockfinder_toggle main.cpp -lgdi32 -luser32
+g++ -o MyDockController  main.cpp -lgdi32 -luser32 -mwindows
 ```
 #### Using `g++`:
 ```bash
-gcc -o mydockfinder_toggle main.cpp -lgdi32 -luser32
+gcc -o MyDockController  main.cpp -lgdi32 -luser32 -mwindows
 ```
 
 Ensure you have the necessary compilers installed and available in your system's PATH.
