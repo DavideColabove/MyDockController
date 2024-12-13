@@ -96,6 +96,3 @@ If you experience issues or need to adjust the program for your system, follow t
 
 Feel free to adapt or improve the program as needed for your specific use case!
 
-
-![Versione](https://img.shields.io/github/v/release/DavideColabove/MyDockController)
-
