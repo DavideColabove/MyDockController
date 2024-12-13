@@ -4,7 +4,9 @@ This program is a utility designed to enhance the gaming experience by automatic
 
 ---
 
-![Ultima Release](https://img.shields.io/github/v/release/DavideColabove/MyDockController?include_prereleases&sort=semver&cacheSeconds=0)
+## Latest release
+[![Latest release](https://img.shields.io/github/v/release/DavideColabove/MyDockController?include_prereleases&sort=semver&cacheSeconds=0)](https://github.com/DavideColabove/MyDockController/releases)
+
 
 
 ## Features
