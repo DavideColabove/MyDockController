@@ -4,6 +4,9 @@ This program is a utility designed to enhance the gaming experience by automatic
 
 ---
 
+![Ultima Release](https://img.shields.io/github/v/release/DavideColabove/MyDockController?include_prereleases&sort=semver&cacheSeconds=0)
+
+
 ## Features
 - Detects when a fullscreen application is active.
 - Stops all MyDockFinder processes during fullscreen applications.
