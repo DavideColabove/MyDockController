@@ -58,7 +58,7 @@ To automatically start the program when your system boots, follow these steps:
 
 1. Press `Win + R` to open the **Run** dialog.
 2. Type `shell:startup` and press Enter. This opens the Startup folder.
-3. Copy the compiled executable (`mydockfinder_toggle.exe`) into this folder.
+3. Copy the compiled executable (`MyDockController.exe`) into this folder.
 
 The program will now launch automatically every time the system starts.
 
