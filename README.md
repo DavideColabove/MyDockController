@@ -45,7 +45,7 @@ Ensure you have the necessary compilers installed and available in your system's
 ### 3. Run the Program as Administrator
 To ensure the program works as intended, it must be executed with administrator privileges. Follow these steps:
 
-1. Locate the compiled executable (`mydockfinder_toggle.exe`).
+1. Locate the compiled executable (`MyDockController.exe`).
 2. Right-click on the file and select **"Run as administrator"**.
 3. Confirm any User Account Control (UAC) prompts.
 
