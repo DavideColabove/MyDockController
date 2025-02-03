@@ -4,6 +4,11 @@ This program is a utility designed to enhance the gaming experience by automatic
 
 ---
 
+## Latest release
+[![Latest release](https://img.shields.io/github/v/release/DavideColabove/MyDockController?include_prereleases&sort=semver&cacheSeconds=0)](https://github.com/DavideColabove/MyDockController/releases)
+
+
+
 ## Features
 - Detects when a fullscreen application is active.
 - Stops all MyDockFinder processes during fullscreen applications.
@@ -45,7 +50,7 @@ Ensure you have the necessary compilers installed and available in your system's
 ### 3. Run the Program as Administrator
 To ensure the program works as intended, it must be executed with administrator privileges. Follow these steps:
 
-1. Locate the compiled executable (`mydockfinder_toggle.exe`).
+1. Locate the compiled executable (`MyDockController.exe`).
 2. Right-click on the file and select **"Run as administrator"**.
 3. Confirm any User Account Control (UAC) prompts.
 
@@ -58,7 +63,7 @@ To automatically start the program when your system boots, follow these steps:
 
 1. Press `Win + R` to open the **Run** dialog.
 2. Type `shell:startup` and press Enter. This opens the Startup folder.
-3. Copy the compiled executable (`mydockfinder_toggle.exe`) into this folder.
+3. Copy the compiled executable (`MyDockController.exe`) into this folder.
 
 The program will now launch automatically every time the system starts.
 
@@ -95,3 +100,4 @@ If you experience issues or need to adjust the program for your system, follow t
 
 
 Feel free to adapt or improve the program as needed for your specific use case!
+
