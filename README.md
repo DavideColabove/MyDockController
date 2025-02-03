@@ -38,7 +38,7 @@ To compile the program, you can use either `g++` or `gcc`. Below are the command
 ```bash
 g++ -o MyDockController  main.cpp -lgdi32 -luser32 -mwindows
 ```
-#### Using `g++`:
+#### Using `gcc`:
 ```bash
 gcc -o MyDockController  main.cpp -lgdi32 -luser32 -mwindows
 ```
