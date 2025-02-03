@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <shellapi.h>
+#include <shlobj.h>
+#include <iostream>
 
 const std::vector<std::string> MYDOCKFINDER_PROCESS_NAMES = {
     "Mydock.exe", "dockmod64.exe", "dock.exe", "dockmod.exe", "Dock_64.exe", "Dock_32.exe"
@@ -85,9 +87,23 @@ bool is_fullscreen() {
     return false;
 }
 
+bool is_screen_sharing() {
+    HWND hwnd = GetForegroundWindow();
+    if (hwnd) {
+        char className[256];
+        GetClassNameA(hwnd, className, sizeof(className));
+        std::string classNameStr(className);
+        // Aggiungi qui i nomi delle classi delle finestre di condivisione dello schermo
+        if (classNameStr.find("ScreenShare") != std::string::npos || classNameStr.find("Zoom") != std::string::npos) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void wait_for_fullscreen_change(bool& dockfinder_running, const std::vector<std::string>& process_names, const std::string& process_path) {
     while (true) {
-        if (is_fullscreen() && dockfinder_running) {
+        if (is_fullscreen() && !is_screen_sharing() && dockfinder_running) {
             stop_process(process_names);
             dockfinder_running = false;
         } else if (!is_fullscreen() && !dockfinder_running) {
@@ -118,7 +134,49 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     return 0;
 }
 
+bool request_admin_privileges(const std::string& executablePath) {
+    SHELLEXECUTEINFO sei = { sizeof(sei) };
+    sei.lpVerb = "runas";
+    sei.lpFile = executablePath.c_str();
+    sei.hwnd = NULL;
+    sei.nShow = SW_NORMAL;
+
+    if (!ShellExecuteEx(&sei)) {
+        DWORD dwError = GetLastError();
+        if (dwError == ERROR_CANCELLED) {
+            std::cout << "L'utente ha rifiutato la richiesta di privilegi di amministratore." << std::endl;
+        }
+        return false;
+    }
+    return true;
+}
+
+void add_to_startup(const std::string& executablePath) {
+    HKEY hKey;
+    if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_WRITE, &hKey) == ERROR_SUCCESS) {
+        RegSetValueEx(hKey, "MyDockFinderToggle", 0, REG_SZ, (BYTE*)executablePath.c_str(), executablePath.size() + 1);
+        RegCloseKey(hKey);
+    }
+}
+
+std::string get_current_executable_path() {
+    char path[MAX_PATH];
+    GetModuleFileNameA(NULL, path, MAX_PATH);
+    return std::string(path);
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    // Ottieni il percorso dell'eseguibile corrente
+    std::string executablePath = get_current_executable_path();
+
+    // Richiedi i privilegi di amministratore al primo avvio
+    if (!request_admin_privileges(executablePath)) {
+        return 1;
+    }
+
+    // Aggiungi l'applicazione all'avvio del computer
+    add_to_startup(executablePath);
+
     const char* className = "MyDockFinderToggleClass";
 
     WNDCLASS wc = {};
